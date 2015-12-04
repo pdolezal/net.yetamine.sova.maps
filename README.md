@@ -12,8 +12,8 @@ Let's have a context instance that offers the typesafe heterogeneous container i
 ```{java}
 // Assuming that the key constants are defined elsewhere, e.g., in UserProfile and Hooks
 final String userId = context.get(UserProfile.IDENTIFIER);
-final X509Certificate[] certificates = context.get(UserProfile.CERTIFICATES);
-context.get(Hooks.AUTHENTICATION).authenticate(userId, certificates);
+final X509Certificate[] certs = context.get(UserProfile.CERTIFICATES);
+context.get(Hooks.AUTHENTICATION).authenticate(userId, certs);
 ```
 
 

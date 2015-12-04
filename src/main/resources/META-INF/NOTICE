@@ -1,3 +1,8 @@
 net.yetamine.sova.maps
 Copyright 2016 Yetamine
 See http://yetamine.net/
+
+A special thanks belongs to Atos (http://atos.net/). The development of this
+library would be much slower without their support which provided a great
+opportunity to verify the library practically and improve it according to the
+experience.
