@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package net.yetamine.sova.collections;
+package net.yetamine.sova.maps;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -101,7 +101,7 @@ public final class LayeringSymbolSource implements SymbolSource {
     }
 
     /**
-     * @see net.yetamine.sova.collections.SymbolSource#get(net.yetamine.sova.Mappable)
+     * @see net.yetamine.sova.maps.SymbolSource#get(net.yetamine.sova.Mappable)
      */
     public <T> T get(Mappable<?, T> symbol) {
         for (SymbolSource source : sources) {
@@ -115,21 +115,21 @@ public final class LayeringSymbolSource implements SymbolSource {
     }
 
     /**
-     * @see net.yetamine.sova.collections.SymbolSource#use(net.yetamine.sova.Mappable)
+     * @see net.yetamine.sova.maps.SymbolSource#use(net.yetamine.sova.Mappable)
      */
     public <T> T use(Mappable<?, T> symbol) {
         return symbol.fallback(get(symbol));
     }
 
     /**
-     * @see net.yetamine.sova.collections.SymbolSource#find(net.yetamine.sova.Mappable)
+     * @see net.yetamine.sova.maps.SymbolSource#find(net.yetamine.sova.Mappable)
      */
     public <T> Optional<T> find(Mappable<?, T> symbol) {
         return Optional.ofNullable(get(symbol));
     }
 
     /**
-     * @see net.yetamine.sova.collections.SymbolSource#yield(net.yetamine.sova.Mappable)
+     * @see net.yetamine.sova.maps.SymbolSource#yield(net.yetamine.sova.Mappable)
      */
     public <T> AdaptationResult<T> yield(Mappable<?, T> symbol) {
         for (SymbolSource source : sources) {

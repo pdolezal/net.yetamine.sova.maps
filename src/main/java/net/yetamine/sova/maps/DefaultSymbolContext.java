@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package net.yetamine.sova.collections;
+package net.yetamine.sova.maps;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -53,7 +53,7 @@ public final class DefaultSymbolContext extends SymbolContextAdapter implements 
     }
 
     /**
-     * @see net.yetamine.sova.collections.SymbolContextAdapter#storage()
+     * @see net.yetamine.sova.maps.SymbolContextAdapter#storage()
      */
     @Override
     protected Map<Object, Object> storage() {

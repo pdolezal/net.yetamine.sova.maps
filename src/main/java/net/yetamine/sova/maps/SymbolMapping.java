@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package net.yetamine.sova.collections;
+package net.yetamine.sova.maps;
 
 import java.util.Map;
 import java.util.Optional;
@@ -77,28 +77,28 @@ public interface SymbolMapping extends SymbolSource {
     }
 
     /**
-     * @see net.yetamine.sova.collections.SymbolSource#get(net.yetamine.sova.Mappable)
+     * @see net.yetamine.sova.maps.SymbolSource#get(net.yetamine.sova.Mappable)
      */
     default <T> T get(Mappable<?, T> symbol) {
         return symbol.get(map());
     }
 
     /**
-     * @see net.yetamine.sova.collections.SymbolSource#use(net.yetamine.sova.Mappable)
+     * @see net.yetamine.sova.maps.SymbolSource#use(net.yetamine.sova.Mappable)
      */
     default <T> T use(Mappable<?, T> symbol) {
         return symbol.use(map());
     }
 
     /**
-     * @see net.yetamine.sova.collections.SymbolSource#find(net.yetamine.sova.Mappable)
+     * @see net.yetamine.sova.maps.SymbolSource#find(net.yetamine.sova.Mappable)
      */
     default <T> Optional<T> find(Mappable<?, T> symbol) {
         return symbol.find(map());
     }
 
     /**
-     * @see net.yetamine.sova.collections.SymbolSource#yield(net.yetamine.sova.Mappable)
+     * @see net.yetamine.sova.maps.SymbolSource#yield(net.yetamine.sova.Mappable)
      */
     default <T> AdaptationResult<T> yield(Mappable<?, T> symbol) {
         return symbol.yield(map());

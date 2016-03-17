@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package net.yetamine.sova.collections;
+package net.yetamine.sova.maps;
 
 import java.io.Serializable;
 import java.util.Collections;
@@ -53,7 +53,7 @@ public final class DefaultSymbolMapping extends SymbolMappingAdapter implements 
     }
 
     /**
-     * @see net.yetamine.sova.collections.SymbolMapping#map()
+     * @see net.yetamine.sova.maps.SymbolMapping#map()
      */
     public Map<?, ?> map() {
         return map;
