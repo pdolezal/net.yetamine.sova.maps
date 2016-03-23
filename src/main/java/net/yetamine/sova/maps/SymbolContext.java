@@ -160,6 +160,19 @@ public interface SymbolContext extends SymbolMapping {
     SymbolContext clear();
 
     /**
+     * Removes all entries, making this instance empty.
+     *
+     * @return this instance
+     *
+     * @throws UnsupportedOperationException
+     *             if the operation is prohibited
+     */
+    default SymbolContext discard() {
+        clear();
+        return this;
+    }
+
+    /**
      * Removes an entry for the specified symbol.
      *
      * <p>

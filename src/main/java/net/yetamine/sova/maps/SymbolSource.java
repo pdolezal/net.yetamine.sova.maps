@@ -32,7 +32,7 @@ import net.yetamine.sova.Mappable;
  * <p>
  * Using {@code null} for the symbol arguments is prohibited (consistently with
  * prohibiting {@code null} values). When suitable or necessary, it is possible
- * to use {@link Mappable#nullified()} as a surrogate for a {@code null} symbol.
+ * to use {@link Mappable#nil()} as a surrogate for a {@code null} symbol.
  *
  * <p>
  * The interface is designed as read-only; however, changing the content might
