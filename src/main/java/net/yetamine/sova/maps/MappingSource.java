@@ -22,7 +22,8 @@ import net.yetamine.sova.AdaptationResult;
 import net.yetamine.sova.Mappable;
 
 /**
- * An unmodifiable symbol-based value source.
+ * A function-like mapping from {@link Mappable} symbols to values that the
+ * symbols are associated with and can adapt them to the desired form.
  *
  * <p>
  * This structure does not support {@code null} values, although implementations
@@ -39,53 +40,7 @@ import net.yetamine.sova.Mappable;
  * be possible anyway: an implementation may offer yet a mutable interface for
  * the content, or an implementation may allow removing entries via the view.
  */
-public interface SymbolSource {
-
-    /**
-     * Returns the value associated with the given symbol, or {@code null} if no
-     * mapping for the symbol exists.
-     *
-     * @param <T>
-     *            the type of the result
-     * @param symbol
-     *            the symbol whose associated value is to be returned. It must
-     *            not be {@code null}.
-     *
-     * @return the value associated with the given symbol, or {@code null} if no
-     *         mapping for the symbol exists
-     */
-    <T> T get(Mappable<?, T> symbol);
-
-    /**
-     * Returns the value associated with the given symbol, or the default value
-     * for the symbol if no mapping for the symbol exists.
-     *
-     * @param <T>
-     *            the type of the result
-     * @param symbol
-     *            the symbol whose associated value is to be returned. It must
-     *            not be {@code null}.
-     *
-     * @return the value associated with the given symbol, or the default value
-     *         for the symbol if no mapping for the symbol exists
-     */
-    <T> T use(Mappable<?, T> symbol);
-
-    /**
-     * Returns an {@link Optional} with the value associated with the given
-     * symbol, or an empty container if no mapping for the symbol exists.
-     *
-     * @param <T>
-     *            the type of the result
-     * @param symbol
-     *            the symbol whose associated value is to be returned. It must
-     *            not be {@code null}.
-     *
-     * @return an {@link Optional} containing the value associated with the
-     *         given symbol, or an empty container if no mapping for the symbol
-     *         exists
-     */
-    <T> Optional<T> find(Mappable<?, T> symbol);
+public interface MappingSource {
 
     /**
      * Returns {@code true} if a value associated with the given symbol exists.
@@ -95,9 +50,53 @@ public interface SymbolSource {
      *
      * @return {@code true} if a value associated with the given symbol exists
      */
-    default boolean contains(Mappable<?, ?> symbol) {
-        return find(symbol).isPresent();
-    }
+    boolean contains(Mappable<?, ?> symbol);
+
+    /**
+     * Returns the value associated with the given symbol, or {@code null} if no
+     * mapping for the symbol exists.
+     *
+     * @param <R>
+     *            the type of the result
+     * @param symbol
+     *            the symbol whose associated value is to be returned. It must
+     *            not be {@code null}.
+     *
+     * @return the value associated with the given symbol, or {@code null} if no
+     *         mapping for the symbol exists
+     */
+    <R> R get(Mappable<?, R> symbol);
+
+    /**
+     * Returns the value associated with the given symbol, or the default value
+     * for the symbol if no mapping for the symbol exists.
+     *
+     * @param <R>
+     *            the type of the result
+     * @param symbol
+     *            the symbol whose associated value is to be returned. It must
+     *            not be {@code null}.
+     *
+     * @return the value associated with the given symbol, or the default value
+     *         for the symbol if no mapping for the symbol exists
+     */
+    <R> R use(Mappable<?, R> symbol);
+
+    /**
+     * Returns an {@link Optional} with the value associated with the given
+     * symbol, or an empty container if no mapping for the symbol exists.
+     *
+     * @param <R>
+     *            the type of the result
+     * @param symbol
+     *            the symbol whose associated value is to be returned. It must
+     *            not be {@code null}.
+     *
+     * @return an {@link Optional} containing the value associated with the
+     *         given symbol, or an empty container if no mapping for the symbol
+     *         exists
+     */
+    <R> Optional<R> find(Mappable<?, R> symbol);
 
     /**
      * Returns an {@link AdaptationResult} describing the attempt to adapt the
@@ -105,7 +104,7 @@ public interface SymbolSource {
      * querying the value or the fallback as well as other details of the
      * operation.
      *
-     * @param <T>
+     * @param <R>
      *            the type of the result
      * @param symbol
      *            the symbol whose associated value is to be returned. It must
@@ -114,5 +113,5 @@ public interface SymbolSource {
      * @return an {@link AdaptationResult} describing the attempt to adapt the
      *         value associated to the given symbol with the symbol
      */
-    <T> AdaptationResult<T> yield(Mappable<?, T> symbol);
+    <R> AdaptationResult<R> yield(Mappable<?, R> symbol);
 }

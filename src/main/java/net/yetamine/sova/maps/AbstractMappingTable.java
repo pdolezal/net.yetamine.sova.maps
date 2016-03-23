@@ -16,22 +16,23 @@
 
 package net.yetamine.sova.maps;
 
-import java.util.Map;
-
 /**
- * A skeletal implementation of an adapter for {@link Map}.
+ * A skeletal implementation of {@link MappingTable} which implements the
+ * required {@link Object} methods, but leaves the default implementations of
+ * the other methods, so that it is actually as complete as possible, leaving
+ * just the {@link #mappings()} method for the inherited classes.
  *
- * <p>
- * Inherited classes must override {@link #map()} to supply the underlying
- * {@link Map} instance which the implementation encapsulates and adapts; the
- * instance may tolerate {@code null} values as well as it may prohibit them.
+ * @param <K>
+ *            the type of the keys
+ * @param <V>
+ *            the type of the values
  */
-public abstract class SymbolMappingAdapter implements SymbolMapping {
+public abstract class AbstractMappingTable<K, V> implements MappingTable<K, V> {
 
     /**
      * Prepares a new instance.
      */
-    protected SymbolMappingAdapter() {
+    protected AbstractMappingTable() {
         // Default constructor
     }
 
@@ -40,7 +41,11 @@ public abstract class SymbolMappingAdapter implements SymbolMapping {
      */
     @Override
     public final boolean equals(Object obj) {
-        return (obj == this) || ((obj instanceof SymbolMapping) && this.map().equals(((SymbolMapping) obj).map()));
+        if (obj == this) {
+            return true;
+        }
+
+        return ((obj instanceof MappingTable<?, ?>) && mappings().equals(((MappingTable<?, ?>) obj).mappings()));
     }
 
     /**
@@ -48,7 +53,7 @@ public abstract class SymbolMappingAdapter implements SymbolMapping {
      */
     @Override
     public final int hashCode() {
-        return map().hashCode();
+        return mappings().hashCode();
     }
 
     /**
@@ -56,6 +61,6 @@ public abstract class SymbolMappingAdapter implements SymbolMapping {
      */
     @Override
     public String toString() {
-        return map().toString();
+        return mappings().toString();
     }
 }
