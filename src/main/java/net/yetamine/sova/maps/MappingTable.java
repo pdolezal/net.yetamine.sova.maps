@@ -147,7 +147,7 @@ public interface MappingTable<K, V> extends MappingView<K, V> {
      *
      * @return the new adapter instance
      */
-    static <K, V> MappingTable<K, V> unmodifiable(MappingTable<? extends K, ? extends V> source) {
+    static <K, V> MappingTable<K, V> unmodifiable(MappingView<? extends K, ? extends V> source) {
         return unmodifiable(source.mappings());
     }
 

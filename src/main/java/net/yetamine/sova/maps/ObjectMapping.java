@@ -74,7 +74,7 @@ public interface ObjectMapping extends MappingTable<Object, Object> {
      *
      * @return the new adapter instance
      */
-    static ObjectMapping unmodifiable(MappingTable<?, ?> source) {
+    static ObjectMapping unmodifiable(MappingView<?, ?> source) {
         return unmodifiable(source.mappings());
     }
 
