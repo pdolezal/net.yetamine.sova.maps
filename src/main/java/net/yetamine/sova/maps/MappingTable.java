@@ -734,7 +734,8 @@ final class MappingTableAdapter<K, V> extends AbstractMappingTable<K, V> impleme
         MappingView<K, V> result = view;
 
         if (result == null) {
-            result = super.view();
+            final Map<K, V> map = Collections.unmodifiableMap(mappings);
+            result = () -> map;
             view = result;
         }
 

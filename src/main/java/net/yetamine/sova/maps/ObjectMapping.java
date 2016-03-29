@@ -186,6 +186,8 @@ final class ObjectMappingAdapter extends AbstractMappingTable<Object, Object> im
 
     /** Underlying {@link Map} instance. */
     private final Map<Object, Object> mappings;
+    /** Cached view instance. */
+    private MappingView<Object, Object> view;
 
     /**
      * Creates a new instance.
@@ -203,6 +205,21 @@ final class ObjectMappingAdapter extends AbstractMappingTable<Object, Object> im
      */
     public Map<Object, Object> mappings() {
         return mappings;
+    }
+
+    /**
+     * @see net.yetamine.sova.maps.MappingTable#view()
+     */
+    public MappingView<Object, Object> view() {
+        MappingView<Object, Object> result = view;
+
+        if (result == null) {
+            final Map<Object, Object> map = Collections.unmodifiableMap(mappings);
+            result = () -> map;
+            view = result;
+        }
+
+        return result;
     }
 }
 
