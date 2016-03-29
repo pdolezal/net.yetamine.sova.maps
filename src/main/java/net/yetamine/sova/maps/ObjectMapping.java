@@ -239,6 +239,13 @@ final class EmptyObjectMapping extends Singleton implements ObjectMapping {
     }
 
     /**
+     * @see net.yetamine.sova.maps.MappingTable#view()
+     */
+    public MappingView<Object, Object> view() {
+        return this::mappings;
+    }
+
+    /**
      * @see net.yetamine.sova.maps.MappingSource#contains(net.yetamine.sova.Mappable)
      */
     public boolean contains(Mappable<?, ?> symbol) {

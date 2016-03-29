@@ -198,9 +198,8 @@ public interface MappingTable<K, V> extends MappingView<K, V> {
      * Returns the source map-like view on this container.
      *
      * <p>
-     * The provided instance may be modifiable, and thus allow direct access to
-     * the container data; on the other hand, an implementation may disallow it
-     * and provide mutability only via the mappable-aware interface.
+     * The result may or may not be modifiable, depending on the implementation;
+     * when modifiable, the result provides direct access to the container data.
      *
      * @return the map-like view on this container
      *
@@ -209,19 +208,12 @@ public interface MappingTable<K, V> extends MappingView<K, V> {
     Map<K, V> mappings();
 
     /**
-     * Provides an unmodifiable view on {@link #mappings()}.
-     *
-     * <p>
-     * The default implementation assumes that the implementation of
-     * {@link #mappings()} returns the same instance always. If this assumption
-     * is not valid for an implementation, this method needs overriding to cope
-     * with the possibly changing results.
+     * Returns an unmodifiable view on {@link #mappings()}.
      *
      * @return an unmodifiable view on {@link #mappings()}
      */
     default MappingView<K, V> view() {
-        final Map<K, V> view = Collections.unmodifiableMap(mappings());
-        return () -> view;
+        return () -> Collections.unmodifiableMap(mappings());
     }
 
     /**

@@ -49,8 +49,10 @@ public interface MappingView<K, V> extends MappingSource {
      * Returns the source {@link Map} instance.
      *
      * <p>
-     * The provided result should be considered unmodifiable, unless its
-     * provider states otherwise.
+     * The result should be considered unmodifiable, unless its provider states
+     * explicitly otherwise. Despite of that, the result may differ between two
+     * invocations as the result of external actions; both the result content
+     * and the result instance identity may differ in such cases.
      *
      * @return the source {@link Map} instance
      */
