@@ -706,8 +706,8 @@ final class MappingTableAdapter<K, V> extends AbstractMappingTable<K, V> impleme
 
     /** Underlying {@link Map} instance. */
     private final Map<K, V> mappings;
-    /** Cached view instance. */
-    private MappingView<K, V> view;
+    /** Cached view instance (allocated on demand). */
+    private transient MappingView<K, V> view;
 
     /**
      * Creates a new instance.
@@ -736,6 +736,11 @@ final class MappingTableAdapter<K, V> extends AbstractMappingTable<K, V> impleme
         if (result == null) {
             final Map<K, V> map = Collections.unmodifiableMap(mappings);
             result = () -> map;
+
+            // Using a local variable intentionally to employ out-of-thin-air
+            // thread safety; the previous value could be either null, or an
+            // existing instance that referred to the same mappings, so it's
+            // as good as this one and mixing the references makes no harm.
             view = result;
         }
 

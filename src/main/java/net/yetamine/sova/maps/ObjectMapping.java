@@ -186,8 +186,8 @@ final class ObjectMappingAdapter extends AbstractMappingTable<Object, Object> im
 
     /** Underlying {@link Map} instance. */
     private final Map<Object, Object> mappings;
-    /** Cached view instance. */
-    private MappingView<Object, Object> view;
+    /** Cached view instance (allocated on demand). */
+    private transient MappingView<Object, Object> view;
 
     /**
      * Creates a new instance.
@@ -216,6 +216,11 @@ final class ObjectMappingAdapter extends AbstractMappingTable<Object, Object> im
         if (result == null) {
             final Map<Object, Object> map = Collections.unmodifiableMap(mappings);
             result = () -> map;
+
+            // Using a local variable intentionally to employ out-of-thin-air
+            // thread safety; the previous value could be either null, or an
+            // existing instance that referred to the same mappings, so it's
+            // as good as this one and mixing the references makes no harm.
             view = result;
         }
 
