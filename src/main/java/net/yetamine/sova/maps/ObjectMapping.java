@@ -54,6 +54,32 @@ public interface ObjectMapping extends MappingTable<Object, Object> {
     }
 
     /**
+     * Adapts a new {@link HashMap} instance which copies the content of the
+     * given source.
+     *
+     * @param source
+     *            the source to mirror. It must not be {@code null}.
+     *
+     * @return the new adapter instance
+     */
+    static ObjectMapping mirror(MappingView<?, ?> source) {
+        return adapt(new HashMap<>(source.mappings()));
+    }
+
+    /**
+     * Adapts a new {@link HashMap} instance which copies the content of the
+     * given source.
+     *
+     * @param source
+     *            the source to mirror. It must not be {@code null}.
+     *
+     * @return the new adapter instance
+     */
+    static ObjectMapping mirror(Map<?, ?> source) {
+        return adapt(new HashMap<>(source));
+    }
+
+    /**
      * Adapts the given {@link Map} instance.
      *
      * @param storage

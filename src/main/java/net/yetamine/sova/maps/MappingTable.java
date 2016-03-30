@@ -119,6 +119,40 @@ public interface MappingTable<K, V> extends MappingView<K, V> {
     }
 
     /**
+     * Adapts a new {@link HashMap} instance which copies the content of the
+     * given source.
+     *
+     * @param <K>
+     *            the type of the keys
+     * @param <V>
+     *            the type of the values
+     * @param source
+     *            the source to mirror. It must not be {@code null}.
+     *
+     * @return the new adapter instance
+     */
+    static <K, V> MappingTable<K, V> mirror(MappingView<? extends K, ? extends V> source) {
+        return adapt(new HashMap<>(source.mappings()));
+    }
+
+    /**
+     * Adapts a new {@link HashMap} instance which copies the content of the
+     * given source.
+     *
+     * @param <K>
+     *            the type of the keys
+     * @param <V>
+     *            the type of the values
+     * @param source
+     *            the source to mirror. It must not be {@code null}.
+     *
+     * @return the new adapter instance
+     */
+    static <K, V> MappingTable<K, V> mirror(Map<? extends K, ? extends V> source) {
+        return adapt(new HashMap<>(source));
+    }
+
+    /**
      * Adapts the given {@link Map} instance.
      *
      * @param <K>
