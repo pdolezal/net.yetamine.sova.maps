@@ -698,7 +698,7 @@ public interface MappingTable<K, V> extends MappingView<K, V> {
      * @return the computed value associated with the specified symbol
      */
     default <R extends V, S extends R> R supplyIfAbsent(Mappable<? extends K, R> symbol, Supplier<S> valueSupplier) {
-        final V result = mappings().compute(symbol.remap(), (k, v) -> symbol.adapt(valueSupplier.get()).request());
+        final V result = mappings().computeIfAbsent(symbol.remap(), k -> symbol.adapt(valueSupplier.get()).request());
         return symbol.derive(result);
     }
 
