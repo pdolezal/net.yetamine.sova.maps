@@ -280,6 +280,34 @@ final class EmptyObjectMapping extends Singleton implements ObjectMapping {
     }
 
     /**
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+
+        return ((obj instanceof MappingTable<?, ?>) && mappings().equals(((MappingTable<?, ?>) obj).mappings()));
+    }
+
+    /**
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        return mappings().hashCode();
+    }
+
+    /**
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return mappings().toString();
+    }
+
+    /**
      * @see net.yetamine.sova.maps.MappingTable#mappings()
      */
     public Map<Object, Object> mappings() {
