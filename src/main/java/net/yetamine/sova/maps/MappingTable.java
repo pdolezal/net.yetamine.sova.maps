@@ -529,8 +529,8 @@ public interface MappingTable<K, V> extends MappingView<K, V> {
         final R item = symbol.adapt(value).request();
 
         @SuppressWarnings("unchecked")
-        final R result = (R) mappings().merge(symbol.remap(), item, (u, v) -> {
-            return symbol.resolve(v).orElse(item);
+        final R result = (R) mappings().merge(symbol.remap(), item, (o, v) -> {
+            return symbol.resolve(o).orElse(item);
         });
 
         // Verify that the result is either null, or is equal to what the adaptation would return
@@ -600,9 +600,9 @@ public interface MappingTable<K, V> extends MappingView<K, V> {
     default <R extends V> R merge(Mappable<? extends K, R> symbol, R value, BiFunction<? super R, ? super R, ? extends R> remappingFunction) {
         final R item = symbol.adapt(value).request();
 
-        final V result = mappings().merge(symbol.remap(), item, (u, v) -> {
-            final R current = symbol.derive(v);
-            final R replace = remappingFunction.apply(item, current);
+        final V result = mappings().merge(symbol.remap(), item, (o, v) -> {
+            final R current = symbol.derive(o);
+            final R replace = remappingFunction.apply(current, item);
             return symbol.adapt(replace).request();
         });
 
