@@ -21,6 +21,7 @@ import java.util.Optional;
 
 import net.yetamine.sova.AdaptationResult;
 import net.yetamine.sova.Mappable;
+import net.yetamine.sova.Mapping;
 
 /**
  * A function-like view of a {@link Map} instance that derives mapping from
@@ -43,7 +44,7 @@ import net.yetamine.sova.Mappable;
  *            the type of the values
  */
 @FunctionalInterface
-public interface MappingView<K, V> extends MappingSource {
+public interface MappingView<K, V> extends Mapping {
 
     /**
      * Returns the source {@link Map} instance.
@@ -59,35 +60,35 @@ public interface MappingView<K, V> extends MappingSource {
     Map<K, V> mappings();
 
     /**
-     * @see net.yetamine.sova.maps.MappingSource#get(net.yetamine.sova.Mappable)
+     * @see net.yetamine.sova.Mapping#get(net.yetamine.sova.Mappable)
      */
     default <R> R get(Mappable<?, R> symbol) {
         return symbol.get(mappings());
     }
 
     /**
-     * @see net.yetamine.sova.maps.MappingSource#use(net.yetamine.sova.Mappable)
+     * @see net.yetamine.sova.Mapping#use(net.yetamine.sova.Mappable)
      */
     default <R> R use(Mappable<?, R> symbol) {
         return symbol.use(mappings());
     }
 
     /**
-     * @see net.yetamine.sova.maps.MappingSource#find(net.yetamine.sova.Mappable)
+     * @see net.yetamine.sova.Mapping#find(net.yetamine.sova.Mappable)
      */
     default <R> Optional<R> find(Mappable<?, R> symbol) {
         return symbol.find(mappings());
     }
 
     /**
-     * @see net.yetamine.sova.maps.MappingSource#contains(net.yetamine.sova.Mappable)
+     * @see net.yetamine.sova.Mapping#contains(net.yetamine.sova.Mappable)
      */
     default boolean contains(Mappable<?, ?> symbol) {
         return (symbol.get(mappings()) != null);
     }
 
     /**
-     * @see net.yetamine.sova.maps.MappingSource#yield(net.yetamine.sova.Mappable)
+     * @see net.yetamine.sova.Mapping#yield(net.yetamine.sova.Mappable)
      */
     default <R> AdaptationResult<R> yield(Mappable<?, R> symbol) {
         return symbol.yield(mappings());

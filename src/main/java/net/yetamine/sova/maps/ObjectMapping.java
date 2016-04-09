@@ -322,35 +322,35 @@ final class EmptyObjectMapping extends Singleton implements ObjectMapping {
     }
 
     /**
-     * @see net.yetamine.sova.maps.MappingSource#contains(net.yetamine.sova.Mappable)
+     * @see net.yetamine.sova.Mapping#contains(net.yetamine.sova.Mappable)
      */
     public boolean contains(Mappable<?, ?> symbol) {
         return false;
     }
 
     /**
-     * @see net.yetamine.sova.maps.MappingSource#get(net.yetamine.sova.Mappable)
+     * @see net.yetamine.sova.Mapping#get(net.yetamine.sova.Mappable)
      */
     public <R> R get(Mappable<?, R> symbol) {
         return null;
     }
 
     /**
-     * @see net.yetamine.sova.maps.MappingSource#use(net.yetamine.sova.Mappable)
+     * @see net.yetamine.sova.Mapping#use(net.yetamine.sova.Mappable)
      */
     public <R> R use(Mappable<?, R> symbol) {
         return symbol.fallback().get();
     }
 
     /**
-     * @see net.yetamine.sova.maps.MappingSource#find(net.yetamine.sova.Mappable)
+     * @see net.yetamine.sova.Mapping#find(net.yetamine.sova.Mappable)
      */
     public <R> Optional<R> find(Mappable<?, R> symbol) {
         return Optional.empty();
     }
 
     /**
-     * @see net.yetamine.sova.maps.MappingSource#yield(net.yetamine.sova.Mappable)
+     * @see net.yetamine.sova.Mapping#yield(net.yetamine.sova.Mappable)
      */
     public <R> AdaptationResult<R> yield(Mappable<?, R> symbol) {
         return AdaptationResult.of(null, null, symbol);
