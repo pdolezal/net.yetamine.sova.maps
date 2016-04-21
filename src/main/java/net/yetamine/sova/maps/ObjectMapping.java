@@ -240,8 +240,9 @@ final class ObjectMappingAdapter extends AbstractMappingTable<Object, Object> im
         MappingView<Object, Object> result = view;
 
         if (result == null) {
-            final Map<Object, Object> map = Collections.unmodifiableMap(mappings);
-            result = () -> map;
+            final Map<Object, Object> unmodifiable = Collections.unmodifiableMap(mappings);
+            // Avoid over-wrapping (hence, if already unmodifiable, the view can this instance too
+            result = (unmodifiable.getClass() == mappings.getClass()) ? this : () -> unmodifiable;
 
             // Using a local variable intentionally to employ out-of-thin-air
             // thread safety; the previous value could be either null, or an

@@ -768,8 +768,9 @@ final class MappingTableAdapter<K, V> extends AbstractMappingTable<K, V> impleme
         MappingView<K, V> result = view;
 
         if (result == null) {
-            final Map<K, V> map = Collections.unmodifiableMap(mappings);
-            result = () -> map;
+            final Map<K, V> unmodifiable = Collections.unmodifiableMap(mappings);
+            // Avoid over-wrapping (hence, if already unmodifiable, the view can this instance too
+            result = (unmodifiable.getClass() == mappings.getClass()) ? this : () -> unmodifiable;
 
             // Using a local variable intentionally to employ out-of-thin-air
             // thread safety; the previous value could be either null, or an
