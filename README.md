@@ -31,9 +31,9 @@ For using the built library is needed:
 
 ## Acknowledgments ##
 
-A special thanks belongs to [Atos](http://atos.net/). The development of this library would be much slower without their support which provided a great opportunity to verify the library practically and improve it according to the experience.
+A special thank belongs to [Atos](http://atos.net/). The development of this library would be much slower without their support which provided a great opportunity to verify the library practically and improve it according to the experience.
 
-Another thanks belongs to *davej* from [project77.org](http://project77.org/) for the permission to use his owl picture as the logo for this project. Why an owl? Because it is so cute and because *sova* means *an owl* in Czech.
+Another thank belongs to *davej* from [project77.org](http://project77.org/) for the permission to use his owl picture as the logo for this project. Why an owl? Because it is so cute and because *sova* means *an owl* in Czech.
 
 
 ## Licensing ##
