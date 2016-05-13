@@ -71,7 +71,7 @@
         <dependency>
             <groupId>net.yetamine</groupId>
             <artifactId>net.yetamine.sova</artifactId>
-            <!-- Built with snapshot/1.0.0/20160410 -->
+            <!-- Built with snapshot/1.0.0/20160602 -->
             <version>1.0.0-SNAPSHOT</version>
         </dependency>
     </dependencies>

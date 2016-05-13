@@ -22,26 +22,39 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
 import net.yetamine.lang.creational.Singleton;
+import net.yetamine.lang.functional.Producer;
 import net.yetamine.sova.AdaptationResult;
 import net.yetamine.sova.Mappable;
+import net.yetamine.sova.ObjectRecord;
 
 /**
  * A convenient simplification for {@link MappingTable} with {@link Object} type
  * parameters (i.e., the most general container possible).
  */
-public interface ObjectMapping extends MappingTable<Object, Object> {
+public interface ObjectTable extends ObjectRecord, MappingTable<Object, Object> {
+
+    /**
+     * Adapts the given {@link Map} instance.
+     *
+     * @param storage
+     *            the instance to adapt. It must not be {@code null}.
+     *
+     * @return the new adapter instance
+     */
+    static ObjectTable adapt(Map<Object, Object> storage) {
+        return new ObjectTableAdapter(storage);
+    }
 
     /**
      * Returns an empty unmodifiable instance.
      *
      * @return an empty unmodifiable instance
      */
-    static ObjectMapping empty() {
-        return EmptyObjectMapping.getInstance();
+    static ObjectTable empty() {
+        return EmptyObjectTable.getInstance();
     }
 
     /**
@@ -49,7 +62,7 @@ public interface ObjectMapping extends MappingTable<Object, Object> {
      *
      * @return the new adapter instance
      */
-    static ObjectMapping create() {
+    static ObjectTable create() {
         return adapt(new HashMap<>());
     }
 
@@ -62,46 +75,8 @@ public interface ObjectMapping extends MappingTable<Object, Object> {
      *
      * @return the new adapter instance
      */
-    static ObjectMapping mirror(MappingView<?, ?> source) {
-        return adapt(new HashMap<>(source.mappings()));
-    }
-
-    /**
-     * Adapts a new {@link HashMap} instance which copies the content of the
-     * given source.
-     *
-     * @param source
-     *            the source to mirror. It must not be {@code null}.
-     *
-     * @return the new adapter instance
-     */
-    static ObjectMapping mirror(Map<?, ?> source) {
+    static ObjectTable mirror(Map<?, ?> source) {
         return adapt(new HashMap<>(source));
-    }
-
-    /**
-     * Adapts the given {@link Map} instance.
-     *
-     * @param storage
-     *            the instance to adapt. It must not be {@code null}.
-     *
-     * @return the new adapter instance
-     */
-    static ObjectMapping adapt(Map<Object, Object> storage) {
-        return new ObjectMappingAdapter(storage);
-    }
-
-    /**
-     * Adapts the given source's {@link #mappings()} as an unmodifiable
-     * {@link Map}.
-     *
-     * @param source
-     *            the instance to adapt. It must not be {@code null}.
-     *
-     * @return the new adapter instance
-     */
-    static ObjectMapping unmodifiable(MappingView<?, ?> source) {
-        return unmodifiable(source.mappings());
     }
 
     /**
@@ -112,33 +87,45 @@ public interface ObjectMapping extends MappingTable<Object, Object> {
      *
      * @return the new adapter instance
      */
-    static ObjectMapping unmodifiable(Map<?, ?> source) {
-        return adapt(Collections.unmodifiableMap(source));
+    static ObjectTable unmodifiable(Map<?, ?> source) {
+        final Map<Object, Object> unmodifiable = Collections.unmodifiableMap(source);
+
+        if (unmodifiable.getClass() == source.getClass()) {
+            @SuppressWarnings("unchecked") // It is unmodifiable already
+            final Map<Object, Object> safe = (Map<Object, Object>) source;
+            return adapt(safe);
+        }
+
+        return adapt(unmodifiable);
+    }
+
+    /**
+     * Adapts the given source as an unmodifiable instance.
+     *
+     * @param source
+     *            the instance to adapt. It must not be {@code null}.
+     *
+     * @return the new adapter instance
+     */
+    static ObjectTable unmodifiable(MappingView<?, ?> source) {
+        return unmodifiable(source.mappings());
     }
 
     // Overriding this-returning methods
 
     /**
-     * @see net.yetamine.sova.maps.MappingTable#clear()
-     */
-    default ObjectMapping clear() {
-        MappingTable.super.clear();
-        return this;
-    }
-
-    /**
      * @see net.yetamine.sova.maps.MappingTable#add(net.yetamine.sova.Mappable,
      *      java.lang.Object)
      */
-    default <T> ObjectMapping add(Mappable<? extends Object, T> symbol, T value) {
-        MappingTable.super.add(symbol, value);
+    default <R> ObjectTable add(Mappable<? extends Object, R> ref, R value) {
+        MappingTable.super.add(ref, value);
         return this;
     }
 
     /**
      * @see net.yetamine.sova.maps.MappingTable#addAll(java.util.Map)
      */
-    default ObjectMapping addAll(Map<? extends Object, ? extends Object> source) {
+    default ObjectTable addAll(Map<? extends Object, ? extends Object> source) {
         MappingTable.super.addAll(source);
         return this;
     }
@@ -146,31 +133,49 @@ public interface ObjectMapping extends MappingTable<Object, Object> {
     /**
      * @see net.yetamine.sova.maps.MappingTable#addAll(net.yetamine.sova.maps.MappingView)
      */
-    default ObjectMapping addAll(MappingView<? extends Object, ? extends Object> source) {
+    default ObjectTable addAll(MappingView<? extends Object, ? extends Object> source) {
         MappingTable.super.addAll(source);
+        return this;
+    }
+
+    /**
+     * @see net.yetamine.sova.maps.MappingTable#clear()
+     */
+    default ObjectTable clear() {
+        MappingTable.super.clear();
         return this;
     }
 
     /**
      * @see net.yetamine.sova.maps.MappingTable#discard(net.yetamine.sova.Mappable)
      */
-    default ObjectMapping discard(Mappable<?, ?> symbol) {
-        MappingTable.super.discard(symbol);
+    default ObjectTable discard(Mappable<?, ?> ref) {
+        MappingTable.super.discard(ref);
         return this;
     }
 
     /**
-     * @see net.yetamine.sova.maps.MappingTable#forEach(java.util.function.BiConsumer)
+     * @see net.yetamine.sova.maps.MappingTable#patch(net.yetamine.sova.Mappable,
+     *      java.lang.Object)
      */
-    default ObjectMapping forEach(BiConsumer<? super Object, ? super Object> consumer) {
-        MappingTable.super.forEach(consumer);
+    default <R> ObjectTable patch(Mappable<? extends Object, R> ref, R value) {
+        MappingTable.super.patch(ref, value);
+        return this;
+    }
+
+    /**
+     * @see net.yetamine.sova.maps.MappingTable#patch(net.yetamine.sova.Mappable,
+     *      java.lang.Object, java.util.function.BiFunction)
+     */
+    default <R> ObjectTable patch(Mappable<? extends Object, R> ref, R value, BiFunction<? super R, ? super R, ? extends R> remapping) {
+        MappingTable.super.patch(ref, value, remapping);
         return this;
     }
 
     /**
      * @see net.yetamine.sova.maps.MappingTable#putAll(java.util.Map)
      */
-    default ObjectMapping putAll(Map<? extends Object, ? extends Object> source) {
+    default ObjectTable putAll(Map<? extends Object, ? extends Object> source) {
         MappingTable.super.putAll(source);
         return this;
     }
@@ -178,16 +183,8 @@ public interface ObjectMapping extends MappingTable<Object, Object> {
     /**
      * @see net.yetamine.sova.maps.MappingTable#putAll(net.yetamine.sova.maps.MappingView)
      */
-    default ObjectMapping putAll(MappingView<? extends Object, ? extends Object> source) {
+    default ObjectTable putAll(MappingView<? extends Object, ? extends Object> source) {
         MappingTable.super.putAll(source);
-        return this;
-    }
-
-    /**
-     * @see net.yetamine.sova.maps.MappingTable#replaceAll(java.util.function.BiFunction)
-     */
-    default ObjectMapping replaceAll(BiFunction<? super Object, ? super Object, ? extends Object> function) {
-        MappingTable.super.replaceAll(function);
         return this;
     }
 
@@ -195,9 +192,16 @@ public interface ObjectMapping extends MappingTable<Object, Object> {
      * @see net.yetamine.sova.maps.MappingTable#set(net.yetamine.sova.Mappable,
      *      java.lang.Object)
      */
-    default <T> ObjectMapping set(Mappable<? extends Object, T> symbol, T value) {
-        MappingTable.super.set(symbol, value);
+    default <R> ObjectTable set(Mappable<? extends Object, R> ref, R value) {
+        MappingTable.super.set(ref, value);
         return this;
+    }
+
+    /**
+     * @see net.yetamine.sova.maps.MappingTable#self()
+     */
+    default Producer<? extends ObjectTable> self() {
+        return () -> this;
     }
 }
 
@@ -205,7 +209,7 @@ public interface ObjectMapping extends MappingTable<Object, Object> {
  * A default implementation of the {@link MappingTable} interface that just
  * adapts an existing {@link Map} instance.
  */
-final class ObjectMappingAdapter extends AbstractMappingTable<Object, Object> implements Serializable, ObjectMapping {
+final class ObjectTableAdapter extends AbstractMappingTable<Object, Object> implements Serializable, ObjectTable {
 
     /** Serialization version: 1 */
     private static final long serialVersionUID = 1L;
@@ -222,7 +226,7 @@ final class ObjectMappingAdapter extends AbstractMappingTable<Object, Object> im
      *            the map providing the underlying storage. It must not be
      *            {@code null}.
      */
-    public ObjectMappingAdapter(Map<Object, Object> map) {
+    public ObjectTableAdapter(Map<Object, Object> map) {
         mappings = Objects.requireNonNull(map);
     }
 
@@ -258,15 +262,15 @@ final class ObjectMappingAdapter extends AbstractMappingTable<Object, Object> im
 /**
  * The implementation of an empty instance.
  */
-final class EmptyObjectMapping extends Singleton implements ObjectMapping {
+final class EmptyObjectTable extends Singleton implements ObjectTable {
 
     /** Sole instance of this class. */
-    private static final EmptyObjectMapping INSTANCE = new EmptyObjectMapping();
+    private static final EmptyObjectTable INSTANCE = new EmptyObjectTable();
 
     /**
      * Creates a new instance.
      */
-    private EmptyObjectMapping() {
+    private EmptyObjectTable() {
         // Default constructor
     }
 
@@ -276,7 +280,7 @@ final class EmptyObjectMapping extends Singleton implements ObjectMapping {
      * @return an instance
      */
     @Singleton.AccessPoint
-    public static EmptyObjectMapping getInstance() {
+    public static EmptyObjectTable getInstance() {
         return INSTANCE;
     }
 
@@ -337,9 +341,9 @@ final class EmptyObjectMapping extends Singleton implements ObjectMapping {
     }
 
     /**
-     * @see net.yetamine.sova.Mapping#use(net.yetamine.sova.Mappable)
+     * @see net.yetamine.sova.Mapping#give(net.yetamine.sova.Mappable)
      */
-    public <R> R use(Mappable<?, R> symbol) {
+    public <R> R give(Mappable<?, R> symbol) {
         return symbol.fallback().get();
     }
 
