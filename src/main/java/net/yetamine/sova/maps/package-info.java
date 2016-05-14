@@ -15,7 +15,7 @@
  */
 
 /**
- * Adapters for turning {@link java.util.Map} into a typesafe heterogeneous
+ * Adapters for turning {@link java.util.Map} into a type-safe heterogeneous
  * container.
  */
 package net.yetamine.sova.maps;

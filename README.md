@@ -1,13 +1,13 @@
 # net.yetamine.sova.maps #
 
-This repository provides an extension of [net.yetamine.sova](http://github.com/pdolezal/net.yetamine.sova) library for use with the standard `Map` interface, turning a common `Map` into a typesafe heterogeneous container easily.
+This repository provides an extension of [net.yetamine.sova](http://github.com/pdolezal/net.yetamine.sova) library for use with the standard `Map` interface, turning a common `Map` into a type-safe heterogeneous container easily.
 
 
 ## Examples ##
 
-Adapting any `Map` instance into a typesafe heterogeneous container is especially useful for various configuration objects and processing contexts. Such a container can become a convenient and extensible replacement for classical beans; unlike a bean, the container works as a collection with implementation details provided by adaptation strategies, which makes it safer, avoids relying on reflection magic heavily and prevents leaking many implementation details.
+Adapting any `Map` instance into a type-safe heterogeneous container is especially useful for various configuration objects and processing contexts. Such a container can become a convenient and extensible replacement for classical Java beans; unlike a bean, the container works as a collection with implementation details provided by adaptation strategies, which makes it safer, avoids relying on reflection magic heavily and prevents leaking many implementation details.
 
-Let's have a context instance that offers the typesafe heterogeneous container interface:
+Let's have a context instance that offers the type-safe heterogeneous container interface:
 
 ```{java}
 // Assuming that the key constants are defined elsewhere, e.g., in UserProfile and Hooks
