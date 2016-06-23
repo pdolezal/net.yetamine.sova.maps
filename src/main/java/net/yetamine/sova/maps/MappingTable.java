@@ -379,7 +379,7 @@ public interface MappingTable<K, V> extends MappingView<K, V>, MappingStore<K, V
      */
     default <R extends V> V replace(Mappable<? extends K, R> ref, R value) {
         final Box<V> item = Box.of(ref.adapt(value).require());
-        mappings().compute(ref.remap(), (k, v) -> (v != null) ? item.put(v) : null);
+        mappings().compute(ref.remap(), (k, v) -> item.put(v));
         return ref.nullable(item.get());
     }
 
