@@ -24,7 +24,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiFunction;
 
-import net.yetamine.lang.creational.Singleton;
 import net.yetamine.lang.functional.Producer;
 import net.yetamine.sova.AdaptationResult;
 import net.yetamine.sova.Mappable;
@@ -262,7 +261,7 @@ final class ObjectTableAdapter extends AbstractMappingTable<Object, Object> impl
 /**
  * The implementation of an empty instance.
  */
-final class EmptyObjectTable extends Singleton implements ObjectTable {
+final class EmptyObjectTable implements Serializable, ObjectTable {
 
     /** Sole instance of this class. */
     private static final EmptyObjectTable INSTANCE = new EmptyObjectTable();
@@ -279,7 +278,6 @@ final class EmptyObjectTable extends Singleton implements ObjectTable {
      *
      * @return an instance
      */
-    @Singleton.AccessPoint
     public static EmptyObjectTable getInstance() {
         return INSTANCE;
     }
@@ -359,5 +357,19 @@ final class EmptyObjectTable extends Singleton implements ObjectTable {
      */
     public <R> AdaptationResult<R> yield(Mappable<?, R> symbol) {
         return AdaptationResult.of(null, null, symbol);
+    }
+
+    // Serialization support
+
+    /** Serialization version: 1 */
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * Returns the common instance instead of the deserialized instance.
+     *
+     * @return the common instance
+     */
+    private Object readResolve() {
+        return getInstance();
     }
 }
